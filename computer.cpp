@@ -143,44 +143,34 @@ bool Computer::process_cmd_move(const std::vector<lang::type>& types, const std:
 
     if(types[1] != lang::type::address)
     {
-        spdlog::warn("Second token must be address but it is {}", types[1]);
+        spdlog::warn("Second token must be address instead of {}", types[1]);
         return false;
     }
 
-    if(!(types[2] == lang::type::address) && !(types[2] == lang::type::number))
+    const auto [ref_1, is_ok_1] = get_memory_ref(tokens[1]);
+    if(!is_ok_1)
     {
-        spdlog::warn("Third token must be address or number but it is {}", types[2]);
         return false;
     }
 
-    const auto [ref, is_ok] = get_memory_ref(tokens[1]);
-    if(is_ok)
+    if((types[2] == lang::type::address))
     {
-        if(types[2] == lang::type::number)
+        const auto [ref_2, is_ok_2] = get_memory_ref(tokens[2]);
+
+        if(is_ok_2)
         {
-            ref = get_number(tokens[2]);
+            ref_1 = ref_2;
             return true;
         }
-        else
-        {
-            const auto [ref_2, is_ok_2] = get_memory_ref(tokens[2]);
-            if(is_ok_2)
-            {
-                ref = ref_2;
-                return true;
-            }
-            else
-            {
-                spdlog::warn("Memory reference couldn't be fetched for {}", tokens[2]);
-                return false;
-            }
-        }
     }
-    else
+    else if((types[2] == lang::type::number))
     {
-        spdlog::warn("Memory reference couldn't be fetched for {}", tokens[1]);
-        return false;
+        const auto number = get_number(tokens[2]);
+        ref_1 = number;
+        return true;
     }
+
+    return false;
 }
 
 bool Computer::process_cmd_jump(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
@@ -190,6 +180,58 @@ bool Computer::process_cmd_jump(const std::vector<lang::type>& types, const std:
 
 bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
+    if((types.size() != 4))
+    {
+        spdlog::warn("Number of tokens must be 4 for math operations, it has {}", types.size());
+        return false;
+    }
+
+    if(types[1] != lang::type::address)
+    {
+        spdlog::warn("Second token must be address instead of {}", types[1]);
+        return false;
+    }
+
+    const auto [ref_1, is_ok_1] = get_memory_ref(tokens[1]);
+    if(!is_ok_1)
+    {
+        return false;
+    }
+
+    if((types[2] == lang::type::address) && (types[3] == lang::type::address))
+    {
+        const auto [ref_2, is_ok_2] = get_memory_ref(tokens[2]);
+        const auto [ref_3, is_ok_3] = get_memory_ref(tokens[3]);
+        if(is_ok_2 && is_ok_3)
+        {
+            ref_1 = ref_2 + ref_3;
+        }
+    }
+    else if((types[2] == lang::type::address) && (types[3] == lang::type::number))
+    {
+        const auto [ref_2, is_ok_2] = get_memory_ref(tokens[2]);
+        const auto number = get_number(tokens[3]);
+        if(is_ok_2)
+        {
+            ref_1 = ref_2 + number;
+        }
+    }
+    else if((types[2] == lang::type::number) && (types[3] == lang::type::address))
+    {
+        const auto [ref_3, is_ok_3] = get_memory_ref(tokens[3]);
+        const auto number = get_number(tokens[2]);
+        if(is_ok_3)
+        {
+            ref_1 = ref_3 + number;
+        }
+    }
+    else if((types[2] == lang::type::number) && (types[3] == lang::type::number))
+    {
+        const auto number_2 = get_number(tokens[2]);
+        const auto number_3 = get_number(tokens[3]);
+        ref_1 = number_2 + number_3;
+    }
+
     return false;
 }
 
