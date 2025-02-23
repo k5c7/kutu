@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget* parent)
     Computer c;
     c.get_code({{"PRINT $0"},
         {"MOV $0 5"},
+        {"MOV $1 7"},
+        {"ADD $0 $0 $1"},
         {"PRINT $0"}});
     c.start();
 }

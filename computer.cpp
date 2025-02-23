@@ -29,6 +29,7 @@ void Computer::start()
         {
             spdlog::warn("Execution stopped due to syntax error at line {}", m_current_line);
             stop();
+            return;
         }
     }
 
@@ -205,6 +206,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         if(is_ok_2 && is_ok_3)
         {
             ref_1 = ref_2 + ref_3;
+            return true;
         }
     }
     else if((types[2] == lang::type::address) && (types[3] == lang::type::number))
@@ -214,6 +216,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         if(is_ok_2)
         {
             ref_1 = ref_2 + number;
+            return true;
         }
     }
     else if((types[2] == lang::type::number) && (types[3] == lang::type::address))
@@ -223,6 +226,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         if(is_ok_3)
         {
             ref_1 = ref_3 + number;
+            return true;
         }
     }
     else if((types[2] == lang::type::number) && (types[3] == lang::type::number))
@@ -230,6 +234,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         const auto number_2 = get_number(tokens[2]);
         const auto number_3 = get_number(tokens[3]);
         ref_1 = number_2 + number_3;
+        return true;
     }
 
     return false;
