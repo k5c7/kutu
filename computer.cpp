@@ -3,10 +3,7 @@
 
 Computer::Computer() :
     m_current_line{0},
-    m_memory{std::vector<uint32_t>(100, 0)},
-    m_code{},
-    m_debug_line{},
-    m_labels{}
+    m_memory{std::vector<uint32_t>(100, 0)}
 {
 
 }
@@ -400,7 +397,7 @@ bool Computer::process_math(const std::string& op_str, uint32_t& ref, uint32_t n
     return true;
 }
 
-bool Computer::process_condition(const std::string& jump_str, int num1, int num2, const std::string& label)
+bool Computer::process_condition(const std::string& jump_str, uint32_t num1, uint32_t num2, const std::string& label)
 {
     if(((jump_str == "JMPE") && (num1 == num2))       ||
             ((jump_str == "JMPNE") && (num1 != num2)) ||

@@ -20,7 +20,6 @@ private:
     std::vector<size_t> m_debug_line;       // in which lines computer should stop
     std::map<std::string, size_t> m_labels; // [label-line] map
 
-
     void scan_labels();
     bool process(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_command(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
@@ -35,7 +34,7 @@ private:
     bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
 
     bool process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2);
-    bool process_condition(const std::string& jump_str, int num1, int num2, const std::string& label);
+    bool process_condition(const std::string& jump_str, uint32_t num1, uint32_t num2, const std::string& label);
 
 
     static uint32_t get_number(const std::string& str);
