@@ -36,6 +36,7 @@ private:
     bool process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2);
     bool process_condition(const std::string& jump_str, uint32_t num1, uint32_t num2, const std::string& label);
 
+    void clean();
 
     static uint32_t get_number(const std::string& str);
     std::pair<uint32_t&, bool> get_memory_ref(const std::string& str);

@@ -1,0 +1,10 @@
+# Calculate sum  of numbers from 1 to 10
+MOV $0 0
+MOV $1 0
+
+_LOOP
+ADD $0 $0 1
+ADD $1 $1 $0
+JMPS $0 10 _LOOP
+
+PRINT $1

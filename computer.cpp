@@ -1,4 +1,5 @@
 #include "computer.h"
+#include <algorithm>
 #include <stdexcept>
 
 Computer::Computer() :
@@ -16,6 +17,7 @@ void Computer::get_code(const std::vector<std::string>& code)
 void Computer::start()
 {
     spdlog::info("Computer started");
+    clean();
     scan_labels();
     const size_t max_line = m_code.size();
 
@@ -408,11 +410,17 @@ bool Computer::process_condition(const std::string& jump_str, uint32_t num1, uin
             ((jump_str == "JMPSE") && (num1 <= num2)))
     {
         m_current_line = m_labels[label] - 1;
-        return true;
+
     }
 
-    spdlog::warn("First token is not defined, it is {}", jump_str);
-    return false;
+    return true;
+}
+
+void Computer::clean()
+{
+    m_labels.clear();
+    std::fill(m_memory.begin(), m_memory.end(), 0);
+    spdlog::debug("Memory and labels are deleted");
 }
 
 uint32_t Computer::get_number(const std::string& str)
@@ -425,7 +433,7 @@ std::pair<uint32_t&, bool> Computer::get_memory_ref(const std::string& str)
     const uint32_t number = get_number(str.substr(1));
     if(number >= m_memory.size())
     {
-        spdlog::warn("number is big or equal than memory size {} >= {}", number, m_memory.size());
+        spdlog::warn("number is big or equal than memory size {} > {}", number, m_memory.size() - 1);
         return{m_memory.at(0), false};
     }
 
