@@ -184,16 +184,11 @@ bool Computer::process_cmd_jump(const std::vector<lang::type>& types, const std:
     {
         return process_cmd_jump_conditional(types, tokens);
     }
-
-    // JMP _LABEL
-    // JME $A $B _LABEL
-    // JME $A 1  _LABEL
-    // JME 2  $B _LABEL
-    // JME 3  4  _LABEL
 }
 
 bool Computer::process_cmd_jump_absolute(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
+    // JMP _LABEL
     if(tokens.size() != 2)
     {
         spdlog::warn("Number of tokens must be 2 for absolute jump, it has {}", tokens.size());
@@ -219,12 +214,65 @@ bool Computer::process_cmd_jump_absolute(const std::vector<lang::type>& types, c
 
 bool Computer::process_cmd_jump_conditional(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
+    if(tokens.size() != 4)
+    {
+        spdlog::warn("Number of tokens must be 4 for absolute jump, it has {}", tokens.size());
+        return false;
+    }
+    else if(types[3] != lang::type::label)
+    {
+        spdlog::warn("Fourth token must be label, it is {}", types[1]);
+        return false;
+    }
+
+    const std::string label = tokens[3].substr(1);
+
+    if(!m_labels.contains(label))
+    {
+        spdlog::warn("{} is not found in labels", label);
+        return false;
+    }
+
+    if(types[1] == lang::type::address && types[2] == lang::type::address)
+    {
+        const auto [num1, is_ok_1] = get_memory_ref(tokens[1]);
+        const auto [num2, is_ok_2] = get_memory_ref(tokens[2]);
+        if(is_ok_1 && is_ok_2)
+        {
+            return process_condition(tokens[0], num1, num2, label);
+        }
+    }
+    else if(types[1] == lang::type::address && types[2] == lang::type::number)
+    {
+        const auto [num1, is_ok_1] = get_memory_ref(tokens[1]);
+        const auto num2 = get_number(tokens[2]);
+        if(is_ok_1)
+        {
+            return process_condition(tokens[0], num1, num2, label);
+        }
+    }
+    else if(types[1] == lang::type::number && types[2] == lang::type::address)
+    {
+        const auto num1 = get_number(tokens[1]);
+        const auto [num2, is_ok_2] = get_memory_ref(tokens[2]);
+        if(is_ok_2)
+        {
+            return process_condition(tokens[0], num1, num2, label);
+        }
+    }
+    else if(types[1] == lang::type::number && types[2] == lang::type::number)
+    {
+        const auto num1 = get_number(tokens[1]);
+        const auto num2 = get_number(tokens[2]);
+        return process_condition(tokens[0], num1, num2, label);
+    }
 
     return false;
 }
 
 bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
+    // FIXME: Only add implemented!
     if((types.size() != 4))
     {
         spdlog::warn("Number of tokens must be 4 for math operations, it has {}", types.size());
@@ -327,6 +375,23 @@ bool Computer::process_cmd_nope(const std::vector<lang::type>& types, const std:
 {
     // FIXME: This function doesn't need types and tokens :)
     return true;
+}
+
+bool Computer::process_condition(const std::string& jump_str, int num1, int num2, const std::string& label)
+{
+    if(((jump_str == "JMPE") && (num1 == num2))       ||
+            ((jump_str == "JMPNE") && (num1 != num2)) ||
+            ((jump_str == "JMPB") && (num1 > num2))   ||
+            ((jump_str == "JMPBE") && (num1 >= num2)) ||
+            ((jump_str == "JMPS") && (num1 < num2))   ||
+            ((jump_str == "JMPSE") && (num1 <= num2)))
+    {
+        m_current_line = m_labels[label] - 1;
+        return true;
+    }
+
+    spdlog::warn("First token is not defined, it is {}", jump_str);
+    return false;
 }
 
 uint32_t Computer::get_number(const std::string& str)

@@ -34,6 +34,8 @@ private:
     bool process_cmd_print(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
 
+    bool process_condition(const std::string& jump_str, int num1, int num2, const std::string& label);
+
 
     static uint32_t get_number(const std::string& str);
     std::pair<uint32_t&, bool> get_memory_ref(const std::string& str);
