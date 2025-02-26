@@ -28,6 +28,8 @@ private:
 
     bool process_cmd_move(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_jump(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
+    bool process_cmd_jump_absolute(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
+    bool process_cmd_jump_conditional(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_math(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_print(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);

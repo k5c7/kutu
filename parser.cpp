@@ -7,8 +7,6 @@ Parser::Parser()
 
 std::tuple<std::vector<lang::type>, std::vector<std::string>, bool> Parser::parse_line(const std::string& line)
 {
-    // TODO: Instead of only returning type and sanity
-    // return type, token and sanity !
     const auto tokens = split(line);
     std::vector<lang::type> lang_types(tokens.size(), lang::type::undefined);
 

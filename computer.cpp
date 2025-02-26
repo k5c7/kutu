@@ -176,6 +176,50 @@ bool Computer::process_cmd_move(const std::vector<lang::type>& types, const std:
 
 bool Computer::process_cmd_jump(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
+    if(tokens[1] == "JMP")
+    {
+        return process_cmd_jump_absolute(types, tokens);
+    }
+    else
+    {
+        return process_cmd_jump_conditional(types, tokens);
+    }
+
+    // JMP _LABEL
+    // JME $A $B _LABEL
+    // JME $A 1  _LABEL
+    // JME 2  $B _LABEL
+    // JME 3  4  _LABEL
+}
+
+bool Computer::process_cmd_jump_absolute(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
+{
+    if(tokens.size() != 2)
+    {
+        spdlog::warn("Number of tokens must be 2 for absolute jump, it has {}", tokens.size());
+        return false;
+    }
+    else if(types[1] != lang::type::label)
+    {
+        spdlog::warn("Second token must be label, it is {}", types[1]);
+        return false;
+    }
+
+    const std::string label = tokens[1].substr(1);
+
+    if(!m_labels.contains(label))
+    {
+        spdlog::warn("{} is not found in labels", label);
+        return false;
+    }
+
+    m_current_line = m_labels.at(label) - 1;
+    return true;
+}
+
+bool Computer::process_cmd_jump_conditional(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
+{
+
     return false;
 }
 
