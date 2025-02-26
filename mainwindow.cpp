@@ -8,17 +8,30 @@ MainWindow::MainWindow(QWidget* parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    Computer c;
-    c.get_code({{"PRINT $0"},
-        {"MOV $0 5"},
-        {"MOV $1 7"},
-        {"ADD $0 $0 $1"},
-        {"PRINT $0"}});
-    c.start();
+#ifndef NDEBUG
+    spdlog::set_level(spdlog::level::debug);
+#endif
+
+    QObject::connect(ui->button_run, SIGNAL(clicked()), this, SLOT(run()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::run()
+{
+    spdlog::debug("Run clicked");
+    QStringList code_qstr_list = ui->editor_code->toPlainText().split(QRegExp("\n|\r\n|\r"));
+    std::vector<std::string> code_str_vec(code_qstr_list.size());
+
+    for(size_t idx = 0; idx < code_str_vec.size(); idx++)
+    {
+        code_str_vec[idx] = code_qstr_list[idx].toStdString();
+    }
+
+    m_computer.get_code(code_str_vec);
+    m_computer.start();
 }
 

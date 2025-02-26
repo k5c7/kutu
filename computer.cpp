@@ -114,9 +114,10 @@ bool Computer::process_command(const std::vector<lang::type>& types, const std::
     {
         process_cmd_math(types, tokens);
     }
-    else if((tokens[0] == "JMP") || (tokens[0] == "JE") || (tokens[0] == "JNE") ||
-            (tokens[0] == "JB") || (tokens[0] == "JBE") || (tokens[0] == "JS") ||
-            (tokens[0] == "JSE"))
+
+    else if((tokens[0] == "JMP") || (tokens[0] == "JMPE") || (tokens[0] == "JMPNE") ||
+            (tokens[0] == "JMPB") || (tokens[0] == "JMPBE") || (tokens[0] == "JMPS") ||
+            (tokens[0] == "JMPSE"))
     {
         process_cmd_jump(types, tokens);
     }
