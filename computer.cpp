@@ -297,8 +297,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         const auto [ref_3, is_ok_3] = get_memory_ref(tokens[3]);
         if(is_ok_2 && is_ok_3)
         {
-            ref_1 = ref_2 + ref_3;
-            return true;
+            return process_math(tokens[0], ref_1, ref_2, ref_3);
         }
     }
     else if((types[2] == lang::type::address) && (types[3] == lang::type::number))
@@ -307,8 +306,7 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         const auto number = get_number(tokens[3]);
         if(is_ok_2)
         {
-            ref_1 = ref_2 + number;
-            return true;
+            return process_math(tokens[0], ref_1, ref_2, number);
         }
     }
     else if((types[2] == lang::type::number) && (types[3] == lang::type::address))
@@ -317,16 +315,14 @@ bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std:
         const auto number = get_number(tokens[2]);
         if(is_ok_3)
         {
-            ref_1 = ref_3 + number;
-            return true;
+            return process_math(tokens[0], ref_1, ref_3, number);
         }
     }
     else if((types[2] == lang::type::number) && (types[3] == lang::type::number))
     {
         const auto number_2 = get_number(tokens[2]);
         const auto number_3 = get_number(tokens[3]);
-        ref_1 = number_2 + number_3;
-        return true;
+        return process_math(tokens[0], ref_1, number_2, number_3);
     }
 
     return false;
@@ -374,6 +370,33 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
 bool Computer::process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
     // FIXME: This function doesn't need types and tokens :)
+    return true;
+}
+
+bool Computer::process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2)
+{
+    if(op_str == "ADD")
+    {
+        ref = num1 + num2;
+    }
+    else if(op_str == "SUB")
+    {
+        ref = num1 - num2;
+    }
+    else if(op_str == "MUL")
+    {
+        ref = num1 * num2;
+    }
+    else if(op_str == "DIV")
+    {
+        ref = num1 / num2;
+    }
+    else
+    {
+        spdlog::warn("Math operation as {} is not defined", op_str);
+        return false;
+    }
+
     return true;
 }
 

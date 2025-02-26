@@ -34,6 +34,7 @@ private:
     bool process_cmd_print(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
 
+    bool process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2);
     bool process_condition(const std::string& jump_str, int num1, int num2, const std::string& label);
 
 
