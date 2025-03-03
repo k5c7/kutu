@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <memory>
 #include "computer.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,6 +22,6 @@ public slots:
 
 private:
     Ui::MainWindow* ui;
-    Computer m_computer;
+    std::unique_ptr<Computer> m_computer;
 };
 #endif // MAINWINDOW_H

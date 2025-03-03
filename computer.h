@@ -3,11 +3,12 @@
 #include "parser.h"
 
 #include <map>
+#include <QPlainTextEdit>
 
 class Computer
 {
 public:
-    Computer();
+    Computer(QPlainTextEdit* console);
     void get_code(const std::vector<std::string>& code);
     void start();
     bool execute_line(const std::string& line);
@@ -19,6 +20,7 @@ private:
     std::vector<std::string> m_code;        // input code
     std::vector<size_t> m_debug_line;       // in which lines computer should stop
     std::map<std::string, size_t> m_labels; // [label-line] map
+    QPlainTextEdit* m_console;
 
     void scan_labels();
     bool process(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);

@@ -2,9 +2,11 @@
 #include <algorithm>
 #include <stdexcept>
 
-Computer::Computer() :
+
+Computer::Computer(QPlainTextEdit* console) :
     m_current_line{0},
-    m_memory{std::vector<uint32_t>(100, 0)}
+    m_memory{std::vector<uint32_t>(100, 0)},
+    m_console{console}
 {
 
 }
@@ -176,7 +178,7 @@ bool Computer::process_cmd_move(const std::vector<lang::type>& types, const std:
 
 bool Computer::process_cmd_jump(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
-    if(tokens[1] == "JMP")
+    if(tokens[0] == "JMP")
     {
         return process_cmd_jump_absolute(types, tokens);
     }
@@ -341,7 +343,8 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
         const auto [ref, is_ok] = get_memory_ref(tokens[1]);
         if(is_ok)
         {
-            spdlog::info("{}", ref); // TODO: Change spdlog to console
+            m_console->appendPlainText(QString::number(ref));
+            spdlog::debug("{}", ref);
             return true;
         }
         else
@@ -351,12 +354,15 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
     }
     else if(types[1] == lang::type::number)
     {
-        spdlog::info("{}", get_number(tokens[1]));
+        m_console->appendPlainText(QString::number(get_number(tokens[1])));
+        spdlog::debug("{}", get_number(tokens[1]));
         return true;
     }
     else if (types[1] == lang::type::string)
     {
-        spdlog::info("{}", tokens[1].substr(1, tokens[1].size() - 2));
+        const auto text = tokens[1].substr(1, tokens[1].size() - 2);
+        m_console->appendPlainText(QString::fromStdString(text));
+        spdlog::debug("{}", text);
         return true;
     }
     else

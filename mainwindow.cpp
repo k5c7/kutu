@@ -6,12 +6,14 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
 #ifndef NDEBUG
     spdlog::set_level(spdlog::level::debug);
 #endif
 
+    m_computer = std::make_unique<Computer>(ui->editor_console);
     QObject::connect(ui->button_run, SIGNAL(clicked()), this, SLOT(run()));
 }
 
@@ -31,7 +33,7 @@ void MainWindow::run()
         code_str_vec[idx] = code_qstr_list[idx].toStdString();
     }
 
-    m_computer.get_code(code_str_vec);
-    m_computer.start();
+    m_computer->get_code(code_str_vec);
+    m_computer->start();
 }
 
