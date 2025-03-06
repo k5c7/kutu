@@ -38,6 +38,10 @@ private:
     bool process_math(const std::string& op_str, double& ref, double num1, double num2);
     bool process_condition(const std::string& jump_str, double num1, double num2, const std::string& label);
 
+    void print_to_console(const std::string& text);
+    void print_to_console(const QString& text);
+
+
     void clean();
 
     static double get_number(const std::string& str);

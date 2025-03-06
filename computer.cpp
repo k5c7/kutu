@@ -343,7 +343,7 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
         const auto [ref, is_ok] = get_memory_ref(tokens[1]);
         if(is_ok)
         {
-            m_console->appendPlainText(QString::number(ref));
+            print_to_console(QString::number(ref));
             spdlog::debug("{}", ref);
             return true;
         }
@@ -354,14 +354,14 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
     }
     else if(types[1] == lang::type::number)
     {
-        m_console->appendPlainText(QString::number(get_number(tokens[1])));
+        print_to_console(QString::number(get_number(tokens[1])));
         spdlog::debug("{}", get_number(tokens[1]));
         return true;
     }
     else if (types[1] == lang::type::string)
     {
         const auto text = tokens[1].substr(1, tokens[1].size() - 2);
-        m_console->appendPlainText(QString::fromStdString(text));
+        print_to_console(QString::fromStdString(text));
         spdlog::debug("{}", text);
         return true;
     }
@@ -420,6 +420,20 @@ bool Computer::process_condition(const std::string& jump_str, double num1, doubl
     }
 
     return true;
+}
+
+void Computer::print_to_console(const std::string& text)
+{
+    m_console->moveCursor (QTextCursor::End);
+    m_console->insertPlainText(QString::fromStdString(text));
+    m_console->moveCursor (QTextCursor::End);
+}
+
+void Computer::print_to_console(const QString& text)
+{
+    m_console->moveCursor (QTextCursor::End);
+    m_console->insertPlainText(text);
+    m_console->moveCursor (QTextCursor::End);
 }
 
 void Computer::clean()
