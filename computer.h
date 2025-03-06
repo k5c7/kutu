@@ -16,7 +16,7 @@ public:
 
 private:
     size_t m_current_line;                  // just like instruction pointer
-    std::vector<uint32_t> m_memory;         // for now it holds unsigned integer
+    std::vector<double> m_memory;         // for now it holds unsigned integer
     std::vector<std::string> m_code;        // input code
     std::vector<size_t> m_debug_line;       // in which lines computer should stop
     std::map<std::string, size_t> m_labels; // [label-line] map
@@ -35,13 +35,13 @@ private:
     bool process_cmd_print(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
 
-    bool process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2);
-    bool process_condition(const std::string& jump_str, uint32_t num1, uint32_t num2, const std::string& label);
+    bool process_math(const std::string& op_str, double& ref, double num1, double num2);
+    bool process_condition(const std::string& jump_str, double num1, double num2, const std::string& label);
 
     void clean();
 
-    static uint32_t get_number(const std::string& str);
-    std::pair<uint32_t&, bool> get_memory_ref(const std::string& str);
+    static double get_number(const std::string& str);
+    std::pair<double&, bool> get_memory_ref(const std::string& str);
 };
 
 #endif // COMPUTER_H

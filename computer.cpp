@@ -5,7 +5,7 @@
 
 Computer::Computer(QPlainTextEdit* console) :
     m_current_line{0},
-    m_memory{std::vector<uint32_t>(100, 0)},
+    m_memory{std::vector<double>(100, 0)},
     m_console{console}
 {
 
@@ -379,7 +379,7 @@ bool Computer::process_cmd_nope(const std::vector<lang::type>& types, const std:
     return true;
 }
 
-bool Computer::process_math(const std::string& op_str, uint32_t& ref, uint32_t num1, uint32_t num2)
+bool Computer::process_math(const std::string& op_str, double& ref, double num1, double num2)
 {
     if(op_str == "ADD")
     {
@@ -406,7 +406,7 @@ bool Computer::process_math(const std::string& op_str, uint32_t& ref, uint32_t n
     return true;
 }
 
-bool Computer::process_condition(const std::string& jump_str, uint32_t num1, uint32_t num2, const std::string& label)
+bool Computer::process_condition(const std::string& jump_str, double num1, double num2, const std::string& label)
 {
     if(((jump_str == "JMPE") && (num1 == num2))       ||
             ((jump_str == "JMPNE") && (num1 != num2)) ||
@@ -429,14 +429,14 @@ void Computer::clean()
     spdlog::debug("Memory and labels are deleted");
 }
 
-uint32_t Computer::get_number(const std::string& str)
+double Computer::get_number(const std::string& str)
 {
-    return stoi(str);
+    return stod(str);
 }
 
-std::pair<uint32_t&, bool> Computer::get_memory_ref(const std::string& str)
+std::pair<double&, bool> Computer::get_memory_ref(const std::string& str)
 {
-    const uint32_t number = get_number(str.substr(1));
+    const double number = get_number(str.substr(1));
     if(number >= m_memory.size())
     {
         spdlog::warn("number is big or equal than memory size {} > {}", number, m_memory.size() - 1);

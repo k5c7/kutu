@@ -84,15 +84,15 @@ lang::type Parser::get_type(const std::string& item)
 
 bool Parser::is_number(const std::string& str)
 {
-    // Ref: https://stackoverflow.com/a/4654718
-    std::string::const_iterator it = str.begin();
-
-    while (it != str.end() && std::isdigit(*it))
+    try
     {
-        ++it;
+        double d = std::stod(str);
+        return true;
     }
-
-    return !str.empty() && it == str.end();
+    catch(...)
+    {
+        return false;
+    }
 }
 
 bool Parser::sanity_check(const std::vector<lang::type>& types)
