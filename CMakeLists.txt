@@ -23,6 +23,7 @@ set(PROJECT_SOURCES
         computer.h computer.cpp
 )
 
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(kutu
         MANUAL_FINALIZATION
@@ -46,6 +47,8 @@ else()
     endif()
 endif()
 
+
+target_compile_options(kutu PRIVATE -Werror)
 target_link_libraries(kutu PRIVATE Qt${QT_VERSION_MAJOR}::Widgets fmt spdlog)
 
 set_target_properties(kutu PROPERTIES
