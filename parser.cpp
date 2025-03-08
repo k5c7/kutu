@@ -8,7 +8,7 @@ Parser::Parser()
 std::tuple<std::vector<lang::type>, std::vector<std::string>, bool> Parser::parse_line(const std::string& line)
 {
     // FIXME: Not a proper solution
-    if(line == "")
+    if(line.empty())
     {
         return {{lang::type::command}, {"NOP"}, true};
     }
@@ -28,6 +28,7 @@ std::tuple<std::vector<lang::type>, std::vector<std::string>, bool> Parser::pars
 
 std::vector<std::string> Parser::split(const std::string& line)
 {
+    // TODO: Write a new split method
     std::vector<std::string> split_vec;
 
     size_t last = 0;
@@ -86,7 +87,7 @@ bool Parser::is_number(const std::string& str)
 {
     try
     {
-        double d = std::stod(str);
+        double num = std::stod(str);
         return true;
     }
     catch(...)

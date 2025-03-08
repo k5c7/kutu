@@ -131,7 +131,7 @@ bool Computer::process_command(const std::vector<lang::type>& types, const std::
     }
     else if(tokens[0] == "NOP")
     {
-        return process_cmd_nope(types, tokens);
+        return process_cmd_nope();
     }
     else
     {
@@ -389,7 +389,7 @@ bool Computer::process_cmd_print_newline(const std::vector<lang::type>& types, c
     return true;
 }
 
-bool Computer::process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
+bool Computer::process_cmd_nope()
 {
     // FIXME: This function doesn't need types and tokens :)
     return true;
@@ -466,7 +466,7 @@ double Computer::get_number(const std::string& str)
 
 std::pair<double&, bool> Computer::get_memory_ref(const std::string& str)
 {
-    const double number = get_number(str.substr(1));
+    const size_t number = static_cast<size_t>(get_number(str.substr(1)));
     if(number >= m_memory.size())
     {
         spdlog::warn("number is big or equal than memory size {} > {}", number, m_memory.size() - 1);

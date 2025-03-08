@@ -8,7 +8,7 @@
 class Computer
 {
 public:
-    Computer(QPlainTextEdit* console);
+    explicit Computer(QPlainTextEdit* console);
     void get_code(const std::vector<std::string>& code);
     void start();
     bool execute_line(const std::string& line);
@@ -34,7 +34,7 @@ private:
     bool process_cmd_math(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_print(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
     bool process_cmd_print_newline(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
-    bool process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens);
+    bool process_cmd_nope();
 
     bool process_math(const std::string& op_str, double& ref, double num1, double num2);
     bool process_condition(const std::string& jump_str, double num1, double num2, const std::string& label);
