@@ -124,6 +124,6 @@ bool Parser::sanity_check(const std::vector<lang::type>& types)
 }
 
 const std::vector<std::string> Parser::s_commands = {"MOV", "JMP", "JMPE", "JMPNE", "JMPB", "JMPBE",
-                                                     "JMPS", "JMPSE", "NOP", "PRINT", "ADD", "SUB",
-                                                     "MUL", "DIV"
+                                                     "JMPS", "JMPSE", "NOP", "PRINT", "PRINTNL",
+                                                     "ADD", "SUB", "MUL", "DIV"
                                                     };

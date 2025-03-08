@@ -107,33 +107,38 @@ bool Computer::process_command(const std::vector<lang::type>& types, const std::
 {
     if(tokens[0] == "MOV")
     {
-        process_cmd_move(types, tokens);
+        return process_cmd_move(types, tokens);
     }
     else if(tokens[0] == "PRINT")
     {
-        process_cmd_print(types, tokens);
+        return process_cmd_print(types, tokens);
+    }
+    else if(tokens[0] == "PRINTNL")
+    {
+        return process_cmd_print_newline(types, tokens);
     }
     else if((tokens[0] == "ADD") || (tokens[0] == "SUB") ||
             (tokens[0] == "MUL") || (tokens[0] == "DIV"))
     {
-        process_cmd_math(types, tokens);
+        return process_cmd_math(types, tokens);
     }
 
     else if((tokens[0] == "JMP") || (tokens[0] == "JMPE") || (tokens[0] == "JMPNE") ||
             (tokens[0] == "JMPB") || (tokens[0] == "JMPBE") || (tokens[0] == "JMPS") ||
             (tokens[0] == "JMPSE"))
     {
-        process_cmd_jump(types, tokens);
+        return process_cmd_jump(types, tokens);
     }
     else if(tokens[0] == "NOP")
     {
-        process_cmd_nope(types, tokens);
+        return process_cmd_nope(types, tokens);
     }
     else
     {
         spdlog::error("Command is not defined {}", tokens[0]);
         throw std::invalid_argument("Command is not defined");
     }
+    return false;
 }
 
 bool Computer::process_cmd_move(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
@@ -371,6 +376,17 @@ bool Computer::process_cmd_print(const std::vector<lang::type>& types, const std
         return false;
     }
 
+}
+
+bool Computer::process_cmd_print_newline(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
+{
+    if(types.size() != 1)
+    {
+        spdlog::warn("Println has {} argument instead of 0", types.size() - 1);
+        return false;
+    }
+    m_console->appendPlainText("");
+    return true;
 }
 
 bool Computer::process_cmd_nope(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
