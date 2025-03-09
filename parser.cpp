@@ -28,7 +28,6 @@ std::tuple<std::vector<lang::type>, std::vector<std::string>, bool> Parser::pars
 
 std::vector<std::string> Parser::split(const std::string& line)
 {
-    // TODO: Write a new split method
     std::vector<std::string> split_vec;
 
     size_t last = 0;
@@ -40,6 +39,7 @@ std::vector<std::string> Parser::split(const std::string& line)
     }
 
     split_vec.push_back(line.substr(last));
+    combine_string_elements(split_vec);
 
     return split_vec;
 }
@@ -122,6 +122,53 @@ bool Parser::sanity_check(const std::vector<lang::type>& types)
     }
 
     return true;
+}
+
+void Parser::combine_string_elements(std::vector<std::string>& line)
+{
+    size_t start_idx = 0;
+    size_t stop_idx = 0;
+
+    for (size_t idx = 0; idx < line.size(); idx++)
+    {
+        if (line[idx].front() == '\"')
+        {
+            start_idx = idx;
+        }
+        else if (line[idx].back() == '\"')
+        {
+            stop_idx = idx;
+        }
+    }
+
+    if ((start_idx != 0) && (stop_idx != 0))
+    {
+        std::vector<std::string> vec;
+
+        for (size_t idx = 0; idx < start_idx; idx++)
+        {
+            vec.push_back(line[idx]);
+        }
+
+        std::string combined_string;
+        for (size_t idx = start_idx; idx <= stop_idx; idx++)
+        {
+            combined_string += line[idx];
+
+            if(idx != stop_idx)
+            {
+                combined_string += " ";
+            }
+        }
+        vec.push_back(combined_string);
+
+        for (size_t idx = stop_idx + 1; idx < line.size(); idx++)
+        {
+            vec.push_back(line[idx]);
+        }
+
+        line = vec;
+    }
 }
 
 const std::vector<std::string> Parser::s_commands = {"MOV", "JMP", "JMPE", "JMPNE", "JMPB", "JMPBE",

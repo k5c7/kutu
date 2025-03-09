@@ -23,6 +23,7 @@ private:
     static lang::type get_type(const std::string& item);
     static bool is_number(const std::string& str);
     static bool sanity_check(const std::vector<lang::type>& types);
+    static void combine_string_elements(std::vector<std::string>& line);
 
     static const std::vector<std::string> s_commands;
     //    static const std::vector
