@@ -21,10 +21,21 @@ TEST(computerTest, math)
     }
 }
 
-
 TEST(computerTest, branch)
 {
-    EXPECT_EQ(1, 1);
+    const std::vector<std::string> code {"_LOOP",
+                                         "ADD $0 $0 1",
+                                         "ADD $1 $1 $0",
+                                         "JMPS $0 10 _LOOP"};
+    constexpr size_t address_idx = 1;
+
+    Computer computer(nullptr);
+    computer.get_code(code);
+    computer.start();
+
+    const double calculated = computer.get_memory(address_idx);
+    constexpr double expected = 55;
+    EXPECT_EQ(calculated, expected);
 }
 
 TEST(computerTest, assignment)
