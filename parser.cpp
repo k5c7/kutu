@@ -33,7 +33,6 @@ std::vector<std::string> Parser::split(const std::string& line)
     // Ref: stackoverflow.com/a/366532
     const std::string pattern = std::string(R"lit([^\s"']+|"([^"]*)"|'([^']*)')lit");
     const std::regex regex(pattern);
-
     auto words_begin = std::sregex_iterator(line.begin(), line.end(), regex);
     const auto words_end = std::sregex_iterator();
 
@@ -90,7 +89,7 @@ bool Parser::is_number(const std::string& str)
 {
     try
     {
-        double num = std::stod(str);
+        const double num = std::stod(str);
         return true;
     }
     catch(...)
@@ -180,5 +179,5 @@ void Parser::combine_string_elements(std::vector<std::string>& line)
 
 const std::vector<std::string> Parser::s_commands = {"MOV", "JMP", "JMPE", "JMPNE", "JMPB", "JMPBE",
                                                      "JMPS", "JMPSE", "NOP", "PRINT", "PRINTNL",
-                                                     "ADD", "SUB", "MUL", "DIV"
+                                                     "ADD", "SUB", "MUL", "DIV", "CLEAR"
                                                     };

@@ -133,6 +133,10 @@ bool Computer::process_command(const std::vector<lang::type>& types, const std::
     {
         return process_cmd_nope();
     }
+    else if(tokens[0] == "CLEAR")
+    {
+        return process_cmd_clear();
+    }
     else
     {
         spdlog::error("Command is not defined {}", tokens[0]);
@@ -390,6 +394,12 @@ bool Computer::process_cmd_print_newline(const std::vector<lang::type>& types, c
 
 bool Computer::process_cmd_nope()
 {
+    return true;
+}
+
+bool Computer::process_cmd_clear()
+{
+    m_console->clear();
     return true;
 }
 
