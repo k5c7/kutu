@@ -13,6 +13,7 @@ public:
     void start();
     bool execute_line(const std::string& line);
     void stop();
+    double get_memory(size_t index);
 
 private:
     size_t m_current_line;                  // just like instruction pointer
@@ -42,7 +43,6 @@ private:
 
     void print_to_console(const std::string& text);
     void print_to_console(const QString& text);
-
 
     void clean();
 

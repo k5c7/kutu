@@ -24,6 +24,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::run()
 {
+    // FIXME: Call stop function
     spdlog::debug("Run clicked");
     QStringList code_qstr_list = ui->editor_code->toPlainText().split(QRegExp("\n|\r\n|\r"));
     std::vector<std::string> code_str_vec(code_qstr_list.size());

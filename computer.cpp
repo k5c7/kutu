@@ -8,7 +8,10 @@ Computer::Computer(QPlainTextEdit* console) :
     m_memory{std::vector<double>(100, 0)},
     m_console{console}
 {
-
+    if (m_console == nullptr)
+    {
+        spdlog::error("m_console is nullptr!");
+    }
 }
 
 void Computer::get_code(const std::vector<std::string>& code)
@@ -35,7 +38,7 @@ void Computer::start()
     }
 
     spdlog::info("Execution stopped in a normal way");
-    stop();
+    //stop();// FIXME: Do not call stop here
 }
 
 bool Computer::execute_line(const std::string& line)
@@ -56,6 +59,17 @@ void Computer::stop()
     m_debug_line.clear();
     m_code.clear();
     std::fill(m_memory.begin(), m_memory.end(), 0);
+}
+
+double Computer::get_memory(size_t index)
+{
+    if(index >= m_memory.size())
+    {
+        spdlog::warn("index is big or equal than memory size {} > {}", index, m_memory.size() - 1);
+        return 0;
+    }
+
+    return m_memory.at(index);
 }
 
 void Computer::scan_labels()
@@ -388,7 +402,10 @@ bool Computer::process_cmd_print_newline(const std::vector<lang::type>& types, c
         spdlog::warn("Println has {} argument instead of 0", types.size() - 1);
         return false;
     }
-    m_console->appendPlainText("");
+    if (m_console != nullptr)
+    {
+        m_console->appendPlainText("");
+    }
     return true;
 }
 
@@ -399,7 +416,10 @@ bool Computer::process_cmd_nope()
 
 bool Computer::process_cmd_clear()
 {
-    m_console->clear();
+    if (m_console != nullptr)
+    {
+        m_console->clear();
+    }
     return true;
 }
 
@@ -448,16 +468,22 @@ bool Computer::process_condition(const std::string& jump_str, double num1, doubl
 
 void Computer::print_to_console(const std::string& text)
 {
-    m_console->moveCursor (QTextCursor::End);
-    m_console->insertPlainText(QString::fromStdString(text));
-    m_console->moveCursor (QTextCursor::End);
+    if (m_console != nullptr)
+    {
+        m_console->moveCursor (QTextCursor::End);
+        m_console->insertPlainText(QString::fromStdString(text));
+        m_console->moveCursor (QTextCursor::End);
+    }
 }
 
 void Computer::print_to_console(const QString& text)
 {
-    m_console->moveCursor (QTextCursor::End);
-    m_console->insertPlainText(text);
-    m_console->moveCursor (QTextCursor::End);
+    if (m_console != nullptr)
+    {
+        m_console->moveCursor (QTextCursor::End);
+        m_console->insertPlainText(text);
+        m_console->moveCursor (QTextCursor::End);
+    }
 }
 
 void Computer::clean()
