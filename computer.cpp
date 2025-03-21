@@ -279,7 +279,6 @@ bool Computer::process_cmd_jump_conditional(const std::vector<lang::type>& types
 
 bool Computer::process_cmd_math(const std::vector<lang::type>& types, const std::vector<std::string>& tokens)
 {
-    // FIXME: Only add implemented!
     if((types.size() != 4))
     {
         spdlog::warn("Number of tokens must be 4 for math operations, it has {}", types.size());
@@ -391,7 +390,6 @@ bool Computer::process_cmd_print_newline(const std::vector<lang::type>& types, c
 
 bool Computer::process_cmd_nope()
 {
-    // FIXME: This function doesn't need types and tokens :)
     return true;
 }
 

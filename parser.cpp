@@ -32,16 +32,16 @@ std::vector<std::string> Parser::split(const std::string& line)
     // Regexp : [^\s"']+|"([^"]*)"|'([^']*)'
     // Ref: stackoverflow.com/a/366532
     const std::string pattern = std::string(R"lit([^\s"']+|"([^"]*)"|'([^']*)')lit");
-    const std::regex re(pattern);
+    const std::regex regex(pattern);
 
-    auto words_begin = std::sregex_iterator(line.begin(), line.end(), re);
-    auto words_end = std::sregex_iterator();
+    auto words_begin = std::sregex_iterator(line.begin(), line.end(), regex);
+    const auto words_end = std::sregex_iterator();
 
     std::vector<std::string> split_vec;
 
-    for (std::sregex_iterator i = words_begin; i != words_end; ++i)
+    for (auto iter = words_begin; iter != words_end; iter++)
     {
-        split_vec.push_back(i->str());
+        split_vec.push_back(iter->str());
     }
 
     return split_vec;
@@ -129,8 +129,6 @@ bool Parser::sanity_check(const std::vector<lang::type>& types)
 
 void Parser::combine_string_elements(std::vector<std::string>& line)
 {
-    // FIXME: It doesn't work when string has whitespace at the
-    // end of the string as: PRINT "a "
     size_t start_idx = 0;
     size_t stop_idx = 0;
 

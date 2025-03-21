@@ -27,7 +27,6 @@ private:
     static void combine_string_elements(std::vector<std::string>& line);
 
     static const std::vector<std::string> s_commands;
-    //    static const std::vector
 
 };
 
