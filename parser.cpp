@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <regex>
 
 Parser::Parser()
 {
@@ -28,18 +29,20 @@ std::tuple<std::vector<lang::type>, std::vector<std::string>, bool> Parser::pars
 
 std::vector<std::string> Parser::split(const std::string& line)
 {
+    // Regexp : [^\s"']+|"([^"]*)"|'([^']*)'
+    // Ref: stackoverflow.com/a/366532
+    const std::string pattern = std::string(R"lit([^\s"']+|"([^"]*)"|'([^']*)')lit");
+    const std::regex re(pattern);
+
+    auto words_begin = std::sregex_iterator(line.begin(), line.end(), re);
+    auto words_end = std::sregex_iterator();
+
     std::vector<std::string> split_vec;
 
-    size_t last = 0;
-    size_t next = 0;
-    while ((next = line.find(' ', last)) != std::string::npos)
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i)
     {
-        split_vec.push_back(line.substr(last, next - last));
-        last = next + 1;
+        split_vec.push_back(i->str());
     }
-
-    split_vec.push_back(line.substr(last));
-    combine_string_elements(split_vec);
 
     return split_vec;
 }
@@ -126,6 +129,8 @@ bool Parser::sanity_check(const std::vector<lang::type>& types)
 
 void Parser::combine_string_elements(std::vector<std::string>& line)
 {
+    // FIXME: It doesn't work when string has whitespace at the
+    // end of the string as: PRINT "a "
     size_t start_idx = 0;
     size_t stop_idx = 0;
 
@@ -159,6 +164,10 @@ void Parser::combine_string_elements(std::vector<std::string>& line)
             {
                 combined_string += " ";
             }
+        }
+        if(line[stop_idx] == "\"")
+        {
+            combined_string += " ";
         }
         vec.push_back(combined_string);
 

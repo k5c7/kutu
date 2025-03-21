@@ -12,6 +12,7 @@ namespace lang
 enum type {command, label, comment, string, number, address, undefined};
 }
 
+// TODO: All member functions of Parser is static. Hence, we don't need a class :)
 class Parser
 {
 public:
