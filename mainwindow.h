@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <memory>
 #include "computer.h"
+#include "highlighter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,5 +24,6 @@ public slots:
 private:
     Ui::MainWindow* ui;
     std::unique_ptr<Computer> m_computer;
+    std::unique_ptr<Highlighter> m_highlighter;
 };
 #endif // MAINWINDOW_H

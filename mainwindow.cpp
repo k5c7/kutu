@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "computer.h"
+#include "highlighter.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget* parent)
     spdlog::set_level(spdlog::level::debug);
 #endif
 
+    m_highlighter = std::make_unique<Highlighter>(ui->editor_code->document());
     m_computer = std::make_unique<Computer>(ui->editor_console);
     QObject::connect(ui->button_run, SIGNAL(clicked()), this, SLOT(run()));
 }
