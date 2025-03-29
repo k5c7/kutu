@@ -9,28 +9,44 @@ Highlighter::Highlighter(QTextDocument* parent)
 
 void Highlighter::highlightBlock(const QString& text)
 {
-    QTextCharFormat myClassFormat;
 
-    myClassFormat.setForeground(Qt::darkMagenta);
+    const auto assignment_color = Qt::darkMagenta;
+    const QRegularExpression assignment_regex("MOV|ADD|SUB|MUL|DIV|NOP");
+    generic_highlight(assignment_color, assignment_regex, text);
 
-    QRegularExpression expression("MOV");
-    QRegularExpressionMatchIterator i = expression.globalMatch(text);
-    while (i.hasNext())
+    const auto jump_color = Qt::darkRed;
+    const QRegularExpression jump_regex("JMP|JMPE|JMPNE|JMPB|JMPBE|JMPS|JMPSE");
+    generic_highlight(jump_color, jump_regex, text);
+
+    const auto memory_color = Qt::darkCyan;
+    const QRegularExpression memory_regex("\\$[0-9]+");
+    generic_highlight(memory_color, memory_regex, text);
+
+    const auto label_color = Qt::red;
+    const QRegularExpression label_regex("\\_\\w+");
+    generic_highlight(label_color, label_regex, text);
+
+    const auto string_color = Qt::darkGreen;
+    const QRegularExpression string_regex("\"(.*?)\"");
+    generic_highlight(string_color, string_regex, text);
+
+    // const auto comment_color = Qt::gray;
+    // const QRegularExpression comment_regex(R"lit()lit");
+    // generic_highlight(comment_color, comment_regex, text);
+
+}
+
+void Highlighter::generic_highlight(Qt::GlobalColor color, const QRegularExpression& regex, const QString& text)
+{
+    // FIXME: Change Qt::GlobalColor to QBrush
+    QTextCharFormat format;
+    format.setForeground(color);
+    // format.setFontWeight(QFont::Bold);
+    QRegularExpressionMatchIterator iter = regex.globalMatch(text);
+
+    while (iter.hasNext())
     {
-        QRegularExpressionMatch match = i.next();
-        setFormat(match.capturedStart(), match.capturedLength(), myClassFormat);
-    }
-
-
-    QTextCharFormat myClassFormat2;
-
-    myClassFormat2.setForeground(Qt::darkGreen);
-
-    QRegularExpression expression2("ADD");
-    QRegularExpressionMatchIterator ii = expression2.globalMatch(text);
-    while (ii.hasNext())
-    {
-        QRegularExpressionMatch match = ii.next();
-        setFormat(match.capturedStart(), match.capturedLength(), myClassFormat2);
+        QRegularExpressionMatch match = iter.next();
+        setFormat(match.capturedStart(), match.capturedLength(), format);
     }
 }

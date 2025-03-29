@@ -9,7 +9,7 @@
 
 namespace lang
 {
-enum type {command, label, comment, string, number, address, undefined};
+enum type {command, label, comment, string, number, address, undefined}; // FIXME: make it enum class
 }
 
 // TODO: All member functions of Parser is static. Hence, we don't need a class :)
