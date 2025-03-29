@@ -42,6 +42,7 @@ else()
 endif()
 
 target_compile_options(kutu PRIVATE -Werror)
+target_compile_options(kutu PRIVATE -Wall)
 target_link_libraries(kutu PRIVATE Qt${QT_VERSION_MAJOR}::Widgets fmt spdlog)
 
 if(QT_VERSION_MAJOR EQUAL 6)

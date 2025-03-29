@@ -12,7 +12,7 @@ public:
     void get_code(const std::vector<std::string>& code);
     void start();
     bool execute_line(const std::string& line);
-    void stop();
+    void reset();
     double get_memory(size_t index);
 
 private:

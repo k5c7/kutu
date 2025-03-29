@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "parser.h"
 #include "computer.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -24,8 +23,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::run()
 {
-    // FIXME: Call stop function
     spdlog::debug("Run clicked");
+    m_computer->reset();
     QStringList code_qstr_list = ui->editor_code->toPlainText().split(QRegExp("\n|\r\n|\r"));
     std::vector<std::string> code_str_vec(code_qstr_list.size());
 

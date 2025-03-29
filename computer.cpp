@@ -32,13 +32,12 @@ void Computer::start()
         if(!is_ok)
         {
             spdlog::warn("Execution stopped due to syntax error at line {}", m_current_line);
-            stop();
+            reset();
             return;
         }
     }
 
     spdlog::info("Execution stopped in a normal way");
-    //stop();// FIXME: Do not call stop here
 }
 
 bool Computer::execute_line(const std::string& line)
@@ -52,9 +51,9 @@ bool Computer::execute_line(const std::string& line)
     return process(types, tokens);
 }
 
-void Computer::stop()
+void Computer::reset()
 {
-    spdlog::info("Computer stopped");
+    spdlog::trace("Computer reset");
     m_current_line = 0;
     m_debug_line.clear();
     m_code.clear();

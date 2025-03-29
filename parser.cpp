@@ -89,7 +89,7 @@ bool Parser::is_number(const std::string& str)
 {
     try
     {
-        const double num = std::stod(str);
+        std::stod(str);
         return true;
     }
     catch(...)
