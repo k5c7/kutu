@@ -1,0 +1,47 @@
+# Calculate square root of 5 with error margin 0.00001 by using bisection method
+CLEAR
+
+MOV $0 5
+MOV $1 0.00001
+
+# $2 low, $3 high
+MOV $2 0
+ADD $4 $0 1
+
+
+_loop
+# calculate mid
+ADD $3 $2 $4
+DIV $3 $3 2
+SUB $20 $3 $2
+JMPSE $20 $1 _final
+
+MUL $5 $2 $2
+SUB $5 $5 $0
+MUL $6 $3 $3
+SUB $6 $6 $0
+MUL $7 $4 $4
+SUB $7 $7 $0
+
+MUL $8 $5 $6
+JMPE $8 0 _found
+JMPS $8 0 _small
+JMPB $8 0 _big
+
+_found
+MOV $10 $3
+JMP _final
+
+_small
+MOV $4 $3
+MOV $10 $3
+JMP _loop
+
+_big
+MOV $2 $3
+MOV $10 $3
+JMP _loop
+
+_final
+PRINT $10
+PRINTNL
