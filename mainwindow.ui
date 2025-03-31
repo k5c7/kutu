@@ -23,6 +23,12 @@
       <height>401</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Ubuntu Mono</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
    </widget>
    <widget class="QPlainTextEdit" name="editor_console">
     <property name="geometry">
